@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        #map {
+            width: 1462px;
+            height: 519px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/_0.js"></script>
+        <script src="data/11_1.js"></script>
+        <script src="data/20240529__2.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[25.022655423817003,121.34338466825449],[25.149340739550293,121.73241498895214]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop__0(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['編號'] !== null ? autolinker.link(feature.properties['編號'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['圖層'] !== null ? autolinker.link(feature.properties['圖層'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['顏色'] !== null ? autolinker.link(feature.properties['顏色'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['街廓編號'] !== null ? autolinker.link(feature.properties['街廓編號'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['分區代碼'] !== null ? autolinker.link(feature.properties['分區代碼'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['分區簡稱'] !== null ? autolinker.link(feature.properties['分區簡稱'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['使用分區'] !== null ? autolinker.link(feature.properties['使用分區'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['分區說明'] !== null ? autolinker.link(feature.properties['分區說明'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['原屬分區'] !== null ? autolinker.link(feature.properties['原屬分區'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['變更前代碼'] !== null ? autolinker.link(feature.properties['變更前代碼'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['變更前簡稱'] !== null ? autolinker.link(feature.properties['變更前簡稱'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['變更前分區'] !== null ? autolinker.link(feature.properties['變更前分區'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['顯示字'] !== null ? autolinker.link(feature.properties['顯示字'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['未取分'] !== null ? autolinker.link(feature.properties['未取分'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['未開分'] !== null ? autolinker.link(feature.properties['未開分'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['公設分'] !== null ? autolinker.link(feature.properties['公設分'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style__0_0() {
+            return {
+                pane: 'pane__0',
+                opacity: 1,
+                color: 'rgba(82,82,82,0.00784313725490196)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(220,220,220,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane__0');
+        map.getPane('pane__0').style.zIndex = 400;
+        map.getPane('pane__0').style['mix-blend-mode'] = 'normal';
+        var layer__0 = new L.geoJson(json__0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__0',
+            layerName: 'layer__0',
+            pane: 'pane__0',
+            onEachFeature: pop__0,
+            style: style__0_0,
+        });
+        bounds_group.addLayer(layer__0);
+        map.addLayer(layer__0);
+        function pop_11_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PERF_ID'] !== null ? autolinker.link(feature.properties['PERF_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COUN_ID'] !== null ? autolinker.link(feature.properties['COUN_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CPID'] !== null ? autolinker.link(feature.properties['CPID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CPTID'] !== null ? autolinker.link(feature.properties['CPTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NPID'] !== null ? autolinker.link(feature.properties['NPID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NPTID'] !== null ? autolinker.link(feature.properties['NPTID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PNAME'] !== null ? autolinker.link(feature.properties['PNAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TNAME'] !== null ? autolinker.link(feature.properties['TNAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['PTNAME'] !== null ? autolinker.link(feature.properties['PTNAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TM2_MAX_X'] !== null ? autolinker.link(feature.properties['TM2_MAX_X'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TM2_MAX_Y'] !== null ? autolinker.link(feature.properties['TM2_MAX_Y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TM2_MIN_X'] !== null ? autolinker.link(feature.properties['TM2_MIN_X'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['TM2_MIN_Y'] !== null ? autolinker.link(feature.properties['TM2_MIN_Y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MAX_X'] !== null ? autolinker.link(feature.properties['MAX_X'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MAX_Y'] !== null ? autolinker.link(feature.properties['MAX_Y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MIN_X'] !== null ? autolinker.link(feature.properties['MIN_X'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['MIN_Y'] !== null ? autolinker.link(feature.properties['MIN_Y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['auxiliary_storage_labeling_lineanchorpercent'] !== null ? autolinker.link(feature.properties['auxiliary_storage_labeling_lineanchorpercent'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['auxiliary_storage_labeling_lineanchorclipping'] !== null ? autolinker.link(feature.properties['auxiliary_storage_labeling_lineanchorclipping'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['auxiliary_storage_labeling_lineanchortype'] !== null ? autolinker.link(feature.properties['auxiliary_storage_labeling_lineanchortype'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['auxiliary_storage_labeling_lineanchortextpoint'] !== null ? autolinker.link(feature.properties['auxiliary_storage_labeling_lineanchortextpoint'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_11_1_0() {
+            return {
+                pane: 'pane_11_1',
+                opacity: 1,
+                color: 'rgba(76,76,76,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_11_1');
+        map.getPane('pane_11_1').style.zIndex = 401;
+        map.getPane('pane_11_1').style['mix-blend-mode'] = 'normal';
+        var layer_11_1 = new L.geoJson(json_11_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_11_1',
+            layerName: 'layer_11_1',
+            pane: 'pane_11_1',
+            onEachFeature: pop_11_1,
+            style: style_11_1_0,
+        });
+        bounds_group.addLayer(layer_11_1);
+        map.addLayer(layer_11_1);
+        function pop_20240529__2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NO'] !== null ? autolinker.link(feature.properties['NO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['行政區'] !== null ? autolinker.link(feature.properties['行政區'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['編號'] !== null ? autolinker.link(feature.properties['編號'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['舊編號'] !== null ? autolinker.link(feature.properties['舊編號'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['序號'] !== null ? autolinker.link(feature.properties['序號'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_20240529__2_0() {
+            return {
+                pane: 'pane_20240529__2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(111,135,255,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_20240529__2');
+        map.getPane('pane_20240529__2').style.zIndex = 402;
+        map.getPane('pane_20240529__2').style['mix-blend-mode'] = 'normal';
+        var layer_20240529__2 = new L.geoJson(json_20240529__2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_20240529__2',
+            layerName: 'layer_20240529__2',
+            pane: 'pane_20240529__2',
+            onEachFeature: pop_20240529__2,
+            style: style_20240529__2_0,
+        });
+        bounds_group.addLayer(layer_20240529__2);
+        map.addLayer(layer_20240529__2);
+        var baseMaps = {};
+        var overlaysTree = [
+        {label: '<b>更新地區出圖</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/20240529__2.png" /> 20240529_劃設更新地區', layer: layer_20240529__2},]},
+        {label: '<b>0112試算7分以上370公頃</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/11_1.png" /> 11臺北市區界圖', layer: layer_11_1},]},
+        {label: '<b>底圖</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/_0.png" /> 臺北市使用分區圖(細計)-白色面', layer: layer__0},]},]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        L.control.scale({position: 'bottomleft', maxWidth: 100, metric: true, imperial: false, updateWhenIdle: false}).addTo(map);
+        setBounds();
+        resetLabels([layer_11_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_11_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_11_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_11_1]);
+        });
+        </script>
+    </body>
+</html>
